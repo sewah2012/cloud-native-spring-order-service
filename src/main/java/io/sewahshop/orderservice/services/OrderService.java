@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface OrderService {
     Flux<Order> getAllOrders();
-    Mono<Order> submitOrder(Order order);
+    Mono<Order> submitOrder(String isbn, Integer quantity);
 
 }
