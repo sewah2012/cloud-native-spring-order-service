@@ -2,7 +2,6 @@ package io.sewahshop.orderservice.repositories;
 
 import io.sewahshop.orderservice.config.PersistenceConfig;
 import io.sewahshop.orderservice.domains.OrderStatus;
-import io.sewahshop.orderservice.services.OrderService;
 import io.sewahshop.orderservice.services.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataR2dbcTest
 @Import(PersistenceConfig.class)
@@ -40,7 +37,7 @@ class OrderRepositoryTest {
 
     private static String r2dbcUrl() {
         return String.format("r2dbc:postgresql://%s:%s/%s",
-                             postgresql.getContainerIpAddress(),
+                             postgresql.getHost(),
                              postgresql.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT),
                              postgresql.getDatabaseName());
     }
