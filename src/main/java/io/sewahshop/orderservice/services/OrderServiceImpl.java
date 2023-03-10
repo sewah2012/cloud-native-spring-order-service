@@ -29,8 +29,8 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Flux<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Flux<Order> getAllOrders(String userId) {
+        return orderRepository.findAllByCreatedBy(userId);
     }
 
     @Override
@@ -63,6 +63,8 @@ public class OrderServiceImpl implements OrderService{
                           OrderStatus.DISPATCHED,
                           existingOrder.createdDate(),
                           existingOrder.lastModifiedDate(),
+                          existingOrder.createdBy(),
+                          existingOrder.lastModifiedBy(),
                           existingOrder.version()
         );
     }

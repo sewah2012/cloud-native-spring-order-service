@@ -21,17 +21,16 @@ spring:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
     url: ${SPRING_FLYWAY_URL:jdbc:postgresql://localhost:5435/polardb_order}
-  config:
-    #    add optional if you want to run the application without the config server: optional:configserver:.
-    #    import: "configserver:"
-    import: "optional:configserver:"
   rabbitmq:
     host: localhost
     port: 5672
     username: user
     password: password
     connection-timeout: 5s
-
+  config:
+    #    add optional if you want to run the application without the config server: optional:configserver:.
+    #    import: "configserver:"
+    import: "optional:configserver:"
   cloud:
     function:
       definition: dispatchOrder
@@ -58,6 +57,11 @@ spring:
         initial-interval: 1000 # 1s
         max-interval: 2000 # 2s
         multiplier: 1.1
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/PolarBookshop
 
 my:
   clients:

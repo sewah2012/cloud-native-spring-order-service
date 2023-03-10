@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface OrderService {
-    Flux<Order> getAllOrders();
+    Flux<Order> getAllOrders(String userId);
     Mono<Order> submitOrder(String isbn, Integer quantity);
     public Flux<Order> consumeOrderDispatchedEvent(
             Flux<OrderDispatchedMessage> flux

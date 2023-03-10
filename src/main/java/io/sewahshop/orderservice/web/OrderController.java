@@ -4,6 +4,8 @@ import io.sewahshop.orderservice.domains.Order;
 import io.sewahshop.orderservice.dto.OrderRequest;
 import io.sewahshop.orderservice.services.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +24,11 @@ public class OrderController {
     }
 
     @GetMapping
-    public Flux<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public Flux<Order> getAllOrders(@AuthenticationPrincipal Jwt jwt) {
+        return orderService.getAllOrders(jwt.getSubject());
     }
+
+
     @PostMapping
     public Mono<Order> submitOrder(
             @RequestBody @Valid OrderRequest orderRequest
