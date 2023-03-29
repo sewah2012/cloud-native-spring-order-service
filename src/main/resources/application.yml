@@ -28,9 +28,10 @@ spring:
     password: password
     connection-timeout: 5s
   config:
-    #    add optional if you want to run the application without the config server: optional:configserver:.
+    import: ""
+  #    add optional if you want to run the application without the config server: optional:configserver:.
     #    import: "configserver:"
-    import: "optional:configserver:"
+#    import: "optional:configserver:"
   cloud:
     function:
       definition: dispatchOrder
@@ -48,6 +49,7 @@ spring:
             producer:
               transacted: true
     config:
+      enabled: false
       uri: ${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}
       request-connect-timeout: 5000
       request-read-timeout: 5000
@@ -62,7 +64,25 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/PolarBookshop
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
 
+logging:
+#  group:
+#    circuitbreaker: io.github.resilience4j, org.springframework.cloud.circuitbreaker
+#  level:
+#    circuitbreaker: info
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 my:
   clients:
     catalog-service-uri: ${CATALOG_SERVICE_URL:http://localhost:9001}
