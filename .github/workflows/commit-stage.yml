@@ -6,7 +6,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: sewah2012/order-service
-  VERSION: latest
+  VERSION: ${{github.sha}}
+#  VERSION: latest
 jobs:
   build:
     name: build and test
@@ -23,13 +24,13 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - name: Validate Kubernetes manifests
-        uses: stefanprodan/kube-tools@v1
-        with:
-          kubectl: 1.24.3
-          kubeval: 0.16.1
-          command: |
-            kubeval --strict -d k8s
+      #      - name: Validate Kubernetes manifests
+      #        uses: stefanprodan/kube-tools@v1
+      #        with:
+      #          kubectl: 1.24.3
+      #          kubeval: 0.16.1
+      #          command: |
+      #            kubeval --strict -d k8s
       - name: code vulnerability scanning
         uses: anchore/scan-action@v3
         id: scan
@@ -48,6 +49,14 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
+
+      - name: Validate Kubernetes manifests
+        uses: stefanprodan/kube-tools@v1
+        with:
+          kubectl: 1.24.3
+          kubeval: 0.16.1
+          command: |
+            kustomize build k8s | kubeval --strict -
   package:
     name: Package and Publish
     if: ${{ github.ref == 'refs/heads/master'}}
@@ -92,3 +101,9 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Publish container image
         run: docker push ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{env.VERSION}}
+      - name: Publish container image (latest)
+        run: |
+          docker tag \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
