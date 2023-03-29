@@ -2,7 +2,6 @@ package io.sewahshop.orderservice.repositories;
 
 import io.sewahshop.orderservice.config.PersistenceConfig;
 import io.sewahshop.orderservice.domains.OrderStatus;
-import io.sewahshop.orderservice.services.OrderService;
 import io.sewahshop.orderservice.services.OrderServiceImpl;
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
